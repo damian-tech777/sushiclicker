@@ -1,0 +1,166 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Sushi Empire</title>
+<style>
+:root{--red:#b3261e;--gold:#e8b230;--ink:#3a2412;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;font-family:Georgia,"Hiragino Mincho ProN",serif;color:var(--ink);background:repeating-linear-gradient(90deg,#5b3718 0 90px,#4a2c12 90px 92px,#66421f 92px 200px,#4a2c12 200px 202px);min-height:100vh;user-select:none;-webkit-user-select:none}
+h1{margin:0;text-align:center;color:#f3e6c8;font-size:1.8em;text-shadow:0 3px 0 #2a1708;padding:2px 0 10px}
+#lamps{display:flex;justify-content:space-around;max-width:1100px;margin:0 auto;height:74px;overflow:hidden;background:linear-gradient(#2a1708,transparent)}
+.lamp{transform-origin:50% 0;animation:sway 4s ease-in-out infinite}.lamp:nth-child(even){animation-delay:-2s}
+@keyframes sway{50%{transform:rotate(5deg)}}
+#app{display:grid;grid-template-columns:minmax(300px,420px) 1fr;gap:18px;max-width:1100px;margin:0 auto;padding:0 12px 30px}
+@media(max-width:800px){#app{grid-template-columns:1fr}}
+.panel{background:repeating-linear-gradient(0deg,#f6ebd0 0 3px,#f1e4c4 3px 4px);border:3px solid #2a1708;box-shadow:0 0 0 3px #a8793f,0 6px 0 3px #2a1708;border-radius:3px;padding:12px}
+#stage{text-align:center;align-self:start}
+#sc{font-size:2.4em;font-weight:bold;line-height:1}.sub{font-size:.9em;opacity:.7}#cps{color:#7a1710;margin:4px 0}
+#big{display:block;margin:6px auto;width:min(84vw,360px);background:none;border:0;padding:0;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+#big svg{display:block;width:100%;height:auto;transform-origin:50% 85%;pointer-events:none}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;box-shadow:0 0 0 5px #2a1708}
+.bar{height:12px;border:2px solid #2a1708;background:#d9c7a0;margin:6px 0}.bar i{display:block;height:100%;width:0;background:linear-gradient(#e8503f,#b3261e)}.bar i.on{background:linear-gradient(#ffe27a,#d49a1c)}
+.btn{background:linear-gradient(#c9362c,#8f1d16);color:#fff3d6;border:2px solid #4a0f0a;border-radius:3px;padding:6px 10px;font:inherit;cursor:pointer;box-shadow:0 2px 0 #4a0f0a}
+.btn:active{transform:translateY(2px);box-shadow:none}.btn:disabled{filter:grayscale(.8) brightness(.85);cursor:not-allowed}.btn[aria-pressed=true]{background:linear-gradient(#e8b230,#b88416);color:#2a1708}
+#tabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}.tab{background:#a8793f;color:#fff3d6;border:2px solid #2a1708;border-bottom:0;padding:6px 9px;font:inherit;cursor:pointer;border-radius:3px 3px 0 0}.tab[aria-selected=true]{background:#2a1708;color:var(--gold)}
+.row{display:grid;grid-template-columns:44px 1fr auto;gap:9px;align-items:center;padding:7px 2px;border-bottom:1px dashed #a8793f}.row.lock{opacity:.6}
+.stamp{width:42px;height:42px;display:grid;place-items:center;background:var(--red);color:#fff3d6;border:2px solid #4a0f0a;border-radius:3px;font-size:1.4em;transform:rotate(-3deg)}
+.d{font-size:.82em;opacity:.8}.bx{display:flex;flex-direction:column;gap:4px}.bx .btn{font-size:.85em}
+#qty{display:flex;gap:6px;margin-bottom:6px}
+.ach{display:inline-block;width:46%;margin:2px;padding:5px;border:2px solid #a8793f;font-size:.8em;opacity:.45}.ach.got{opacity:1;background:#ffe9a8;border-color:#b88416}
+textarea{width:100%;height:60px}
+footer{text-align:center;padding:0 12px 24px;color:#f3e6c8;font-size:.85em}footer button{background:none;border:0;color:var(--gold);font:inherit;text-decoration:underline;cursor:pointer}dialog{max-width:min(92vw,560px);background:#f6ebd0;color:var(--ink);border:3px solid #2a1708;border-radius:3px;font-size:.92em}dialog::backdrop{background:#000a}#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+#fl{position:fixed;inset:0;pointer-events:none;z-index:60}
+.fl{position:fixed;font-weight:bold;color:#fff3d6;text-shadow:0 2px 0 #5a120d,0 0 6px #000;animation:rise 1s ease-out forwards;white-space:nowrap;transform:translateX(-50%)}.fl.c{color:var(--gold);font-size:1.5em}
+@keyframes rise{from{opacity:1;margin-top:0}to{opacity:0;margin-top:-80px}}
+.gold{position:fixed;z-index:55;width:76px;height:76px;border:0;background:none;cursor:pointer;animation:bob 1.2s ease-in-out infinite;filter:drop-shadow(0 0 10px #ffd24a)}.gold img{width:100%}
+@keyframes bob{50%{transform:translateY(-10px) rotate(8deg)}}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:70;display:flex;flex-direction:column;gap:4px;align-items:center}
+.t{background:#2a1708;color:#ffe9a8;border:2px solid var(--gold);padding:6px 12px;border-radius:3px;max-width:90vw}
+#big svg{animation:br 3.2s ease-in-out infinite}@keyframes br{50%{transform:scale(1.025,.985)}}.tw{animation:tw 2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}@keyframes tw{50%{opacity:.15;transform:scale(.5)}}.rg{position:fixed;width:20px;height:20px;margin:-10px;border:3px solid #fff;border-radius:50%;animation:rg .45s ease-out forwards;pointer-events:none}.rg.c{border-color:var(--gold);border-width:5px}@keyframes rg{to{transform:scale(6);opacity:0}}
+body.red *{animation:none!important}
+</style></head><body>
+<div id="lamps" aria-hidden="true"></div><h1>寿司 Sushi Empire</h1>
+<div id="app"><section id="stage" class="panel"><div id="sc">0</div><div class="sub">Sushi</div><div id="cps"></div>
+<button id="big" aria-label="Sushi anklicken"></button><div id="cb"></div><div class="bar"><i id="rb"></i></div><button id="rush" class="btn"></button><div class="d" style="margin-top:8px">Tipp: Leertaste oder Enter klickt ebenfalls. Schnelles Klicken baut Combos auf. Jeder 100. Klick ist ein Jackpot (×5)!</div></section>
+<section class="panel" id="shop"><div id="tabs" role="tablist"></div><div id="panes"></div></section></div>
+<footer>Sushi Empire · <button data-d="imp">Impressum</button> · <button data-d="dsg">Datenschutz</button></footer>
+<dialog id="imp"><h2>Impressum</h2><p><b>Platzhalter – vor der Veröffentlichung ausfüllen.</b> Welche Pflichtangaben nötig sind, hängt von deiner Situation ab.</p><p>Angaben gemäß § 5 DDG:<br>[Vor- und Nachname]<br>[Straße und Hausnummer]<br>[PLZ und Ort]</p><p>Kontakt: [E-Mail-Adresse]</p><form method="dialog"><button class="btn">Schließen</button></form></dialog>
+<dialog id="dsg"><h2>Datenschutzerklärung</h2><p><b>Platzhalter – vor der Veröffentlichung prüfen und ergänzen.</b></p><p><b>Verantwortlich:</b> [Name und E-Mail-Adresse]</p><p><b>Spielstand:</b> Dein Spielstand wird nur lokal in deinem Browser (localStorage) gespeichert und nicht an einen Server gesendet. Du kannst ihn unter „Optionen → Alles löschen“ oder über die Löschung der Browserdaten entfernen.</p><p><b>Hosting:</b> Der Hosting-Anbieter [Anbieter eintragen] verarbeitet beim Aufruf technisch notwendige Server-Logdaten (z. B. IP-Adresse).</p><p><b>Cookies, Tracking, Werbung:</b> Dieses Spiel setzt derzeit keine Cookies, kein Tracking und keine Werbung ein. [Beim Einbau von Werbung oder Statistik hier ergänzen.]</p><form method="dialog"><button class="btn">Schließen</button></form></dialog>
+<canvas id="fx"></canvas><div id="fl"></div><div id="toast" role="status"></div>
+<script>
+const $=q=>document.querySelector(q),mk=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e},setT=(e,t)=>{if(e._t!==t){e._t=t;e.textContent=t}};
+const SUF=['','K','M','B','T','Qa','Qi','Sx','Sp','Oc','No','Dc','Ud','Dd'],CAP=1e300,cap=x=>x>CAP?CAP:x;
+function fmt(n){if(!isFinite(n))return'∞';if(n<1e3)return n>=100?n.toFixed(0):n.toFixed(n%1?(n<10?2:1):0);const e=Math.floor(Math.log10(n)/3);return e>=SUF.length?n.toExponential(2).replace('e+','e'):(n/Math.pow(10,3*e)).toFixed(2)+SUF[e]}
+const B=[["Lehrling","弟",10,.3],["Sushi-Meister","師",100,1.6],["Laufband","帯",1100,9],["Fischerboot","船",12e3,55],["Restaurant","店",13e4,320],["Sushi-Fabrik","工",14e5,1800],["Thunfisch-Farm","鮪",2e7,10500],["Reis-Terrassen","田",3.3e8,62e3],["Mond-Küche","月",5.1e9,38e4],["Zeit-Sushi-Maschine","時",75e9,24e5],["Sushi-Dimension","界",1e12,15e6],["Sushi-Universum","宙",17e12,1e8]];
+const P=B.map(([n,g,c,p])=>({n,g,c,p}));['I','II','III','IV','V','VI','VII','VIII'].forEach(r=>{const q=P[P.length-1];P.push({n:'Sushi-Multiversum '+r,g:'∞',c:q.c*13,p:q.p*6.4})});
+P.forEach(p=>{p.c*=1.6;p.p*=.7});const MS=[10,25,50,100,150,200,250,300,400,500],msC=o=>MS.filter(m=>o>=m).length;
+const IT=[{n:'Bambus-Stäbchen',g:'箸',d:'+1 Klickkraft pro Stufe',c:40,g2:1.45,e:l=>`+${l} Klickkraft`},{n:'Scharfes Messer',g:'刀',d:'+5 Klickkraft pro Stufe',c:500,g2:1.5,e:l=>`+${5*l} Klickkraft`},{n:'Edler Reis',g:'米',d:'+1 % deiner Sushi/s pro Klick',c:6e3,g2:1.7,e:l=>`+${l} % Sushi/s pro Klick`},{n:'Wasabi',g:'辛',d:'+1 % Krit-Chance (max. 40)',c:800,g2:1.6,max:40,e:l=>`${5+l} % Krit-Chance`},{n:'Legendäres Santoku',g:'匠',d:'Klickkraft ×1,25',c:2e6,g2:4,e:l=>`×${Math.pow(1.25,l).toFixed(2)}`},{n:'Goldene Stäbchen',g:'金',d:'Klickkraft ×1,5',c:5e9,g2:6,e:l=>`×${Math.pow(1.5,l).toFixed(2)}`}];
+const RS=[{n:'Effiziente Küche',g:'効',d:'+10 % Produktion pro Stufe',c:2e3,g2:2.2,e:l=>`+${10*l} %`},{n:'Kritische Technik',g:'技',d:'Krit-Treffer +2× stärker',c:5e3,g2:2.5,e:l=>`Krit ×${10+2*l}`},{n:'Schnelle Wellen',g:'波',d:'Sushi Rush lädt 15 % schneller (max. 20)',c:4e3,g2:2.4,max:20,e:l=>`+${15*l} %`},{n:'Combo-Meisterschaft',g:'連',d:'Max. Combo-Bonus +25 % (max. 20)',c:8e3,g2:2.8,max:20,e:l=>`Max. ×${(2+.25*l).toFixed(2)}`},{n:'Kühlhaus',g:'冷',d:'Offline-Zeit +1 Std. (max. 10)',c:15e3,g2:3,max:10,e:l=>`${2+l} Std. Offline`}];
+const SK=[{n:'Lachs-Nigiri',c:['#ff9a6b','#e0623a']},{n:'Thunfisch-Nigiri',c:['#e0475b','#9c1c36']},{n:'Tamago-Nigiri',c:['#ffd24a','#d49a1c']},{n:'Gurken-Maki',t:'m'},{n:'Aal-Nigiri',c:['#a0623a','#5a3018']},{n:'Regenbogen-Roll',t:'r'},{n:'Goldenes Nigiri',c:['#ffe27a','#c98f12'],gd:1}],SKT=[0,3,6,9,12,16,20];
+const ACH=[],A=(id,n,f)=>ACH.push({id,n,f});
+[1,100,1e3,1e4,5e4].forEach(v=>A('c'+v,fmt(v)+' Klicks',()=>s.clicks>=v));[1e3,1e6,1e9,1e12,1e15,1e20,1e30].forEach(v=>A('l'+v,fmt(v)+' Sushi gesamt',()=>s.life>=v));
+[1,25,100,500,2e3].forEach(v=>A('b'+v,v+' Helfer',()=>s.own.reduce((a,b)=>a+b,0)>=v));[10,100,500].forEach(v=>A('k'+v,v+' kritische Treffer',()=>s.crits>=v));
+[1,10,50].forEach(v=>A('g'+v,v+' goldene Sushi',()=>s.gold>=v));[1,5].forEach(v=>A('p'+v,v+'× Prestige',()=>s.pres>=v));
+const KEY='sushiEmpire.v1',def=()=>({sushi:0,run:0,life:0,clicks:0,crits:0,gold:0,tokens:0,pres:0,own:P.map(()=>0),upg:P.map(()=>0),it:IT.map(()=>0),rs:RS.map(()=>0),ord:[],ach:{},skin:0,fz:0,cr:0,rush:0,rushEnd:0,t:Date.now(),snd:1,red:matchMedia('(prefers-reduced-motion:reduce)').matches?1:0});
+function san(o){if(!o||typeof o!=='object')return null;const d=def(),n=(v,m=CAP)=>typeof v==='number'&&isFinite(v)&&v>=0?Math.min(v,m):0;
+for(const k of['sushi','run','life','clicks','crits','gold','tokens','pres'])d[k]=n(o[k]);
+d.own=d.own.map((_,i)=>Math.floor(n(o.own&&o.own[i],1e6)));d.upg=d.upg.map((_,i)=>Math.floor(n(o.upg&&o.upg[i],500)));
+d.it=d.it.map((_,i)=>Math.floor(n(o.it&&o.it[i],IT[i].max||1e5)));d.rs=d.rs.map((_,i)=>Math.floor(n(o.rs&&o.rs[i],RS[i].max||1e5)));
+d.ord=(Array.isArray(o.ord)?o.ord:[]).slice(0,3).filter(q=>q&&['clicks','earn','crit'].includes(q.k)&&isFinite(q.g)&&q.g>0&&isFinite(q.r)&&q.r>=0).map(q=>({k:q.k,g:Math.min(q.g,CAP),r:Math.min(q.r,CAP),p:n(q.p,q.g)}));
+d.skin=Math.min(SK.length-1,Math.floor(n(o.skin)));d.fz=n(o.fz,4e12);d.cr=n(o.cr,4e12);d.rush=n(o.rush,100);d.rushEnd=n(o.rushEnd,4e12);d.t=n(o.t,4e12)||Date.now();d.snd=o.snd?1:0;d.red=o.red?1:0;
+ACH.forEach(a=>{if(o.ach&&o.ach[a.id])d.ach[a.id]=1});return d}
+let s=(()=>{try{const r=localStorage.getItem(KEY);return r&&san(JSON.parse(r))}catch(e){return null}})()||def(),cps=0,ac=0,combo=0,lastClick=0,qty=1,tab=0;
+const save=()=>{s.t=Date.now();try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}};
+const rushOn=()=>Date.now()<s.rushEnd,gmul=()=>(1+.05*s.tokens)*(1+.1*s.rs[0])*(1+.01*ac)*(rushOn()?5:1)*(Date.now()<s.fz?7:1),unit=i=>P[i].p*Math.pow(2,msC(s.own[i]))*Math.pow(1.5,s.upg[i])*gmul();
+function calc(){ac=Object.keys(s.ach).length;let t=0;for(let i=0;i<P.length;i++)t+=s.own[i]*unit(i);cps=cap(t)}
+const clickPow=()=>cap((1+s.it[0]+5*s.it[1]+cps*.01*s.it[2])*Math.pow(1.25,s.it[4])*Math.pow(1.5,s.it[5])*(1+.05*s.tokens)),comboMult=()=>1+Math.min(1+.25*s.rs[3],Math.floor(combo/10)*.1),critCh=()=>Math.min(.6,.05+.01*s.it[3]),critMul=()=>10+2*s.rs[1];
+function prog(k,a){for(const o of s.ord)if(o.k===k)o.p=Math.min(o.g,o.p+a)}
+function gain(a,no){s.sushi=cap(s.sushi+a);s.run=cap(s.run+a);s.life=cap(s.life+a);if(!no)prog('earn',a)}
+function newOrder(){calc();const k=['clicks','earn','crit'][Math.random()*3|0],c=clickPow();
+if(k==='clicks'){const g=40+(Math.random()*60|0);return{k,g,p:0,r:Math.ceil(cps*90+c*g*2+30)}}
+if(k==='earn'){const g=Math.ceil(Math.max(150,cps*150)*(.6+Math.random()*.8));return{k,g,p:0,r:Math.ceil(g*.5)}}
+const g=3+(Math.random()*4|0);return{k,g,p:0,r:Math.ceil(cps*200+c*g*5+60)}}
+function toast(t){const e=mk('div','t');e.textContent=t;$('#toast').append(e);while($('#toast').children.length>4)$('#toast').firstChild.remove();setTimeout(()=>e.remove(),3500)}
+let AC;function snd(k){if(!s.snd)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const f={click:[520+Math.random()*300,.06,'triangle'],crit:[880,.18,'square'],buy:[660,.12,'sine'],ach:[990,.25,'sine'],gold:[1200,.3,'sine']}[k],o=AC.createOscillator(),g=AC.createGain();o.type=f[2];o.frequency.value=f[0];g.gain.setValueAtTime(.05,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+f[1]);o.connect(g).connect(AC.destination);o.start();o.stop(AC.currentTime+f[1])}catch(e){}}
+/* Grafiken */
+function bigSVG(k){const K=SK[k];let b='';const grains=Array.from({length:10},(_,i)=>{const a=i/10*6.28;return`<ellipse cx="${150+Math.cos(a)*52}" cy="${158+Math.sin(a)*52}" rx="6" ry="3" fill="#ece1c4" transform="rotate(${i*36} ${150+Math.cos(a)*52} ${158+Math.sin(a)*52})"/>`}).join('');
+if(K.t==='m')b=`<circle cx="150" cy="158" r="86" fill="#1f2d25"/><circle cx="150" cy="158" r="72" fill="#fffaf0" stroke="#d4c8a8" stroke-width="2"/>${grains}<circle cx="150" cy="158" r="30" fill="#ff9a6b" stroke="#e0623a" stroke-width="3"/><circle cx="136" cy="148" r="12" fill="#7cbf4a"/><circle cx="168" cy="170" r="8" fill="#ffd24a"/><path d="M96 120q20-26 52-30" stroke="#fff" stroke-opacity=".4" stroke-width="6" fill="none" stroke-linecap="round"/>`;
+else if(K.t==='r')b=`<defs><clipPath id="rc"><ellipse cx="150" cy="170" rx="104" ry="62"/></clipPath></defs><ellipse cx="150" cy="176" rx="108" ry="64" fill="#1f2d25"/><g clip-path="url(#rc)">${['#e0475b','#ff9a6b','#ffd24a','#7cbf4a','#f08fb8'].map((c,i)=>`<rect x="${46+i*42}" y="100" width="43" height="140" fill="${c}"/>`).join('')}</g><ellipse cx="150" cy="170" rx="104" ry="62" fill="none" stroke="#fffaf0" stroke-width="5"/><path d="M80 150q70-40 140 0" stroke="#fff" stroke-opacity=".5" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+else b=`<defs><linearGradient id="tp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${K.c[0]}"/><stop offset="1" stop-color="${K.c[1]}"/></linearGradient></defs><path d="M64 200q-6-44 86-46t86 46q-4 28-86 28t-86-28z" fill="#fffaf0" stroke="#d4c8a8" stroke-width="3"/>${[[96,208],[130,217],[170,218],[206,208],[112,196],[190,198]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="7" ry="3.5" fill="#ece1c4" transform="rotate(${x%40-20} ${x} ${y})"/>`).join('')}<path d="M50 168q20-66 100-68t100 68q-12 30-100 30t-100-30z" fill="url(#tp)" stroke="${K.c[1]}" stroke-width="3"/><path d="M80 150q30-24 60-26M130 170q40-20 70-30M170 122q30 4 50 24" stroke="#fff" stroke-opacity=".55" stroke-width="4" fill="none" stroke-linecap="round"/><rect x="136" y="104" width="28" height="118" rx="3" fill="#1f2d25"/><ellipse cx="108" cy="130" rx="26" ry="9" fill="#fff" opacity=".25" transform="rotate(-18 108 130)"/>${K.gd?'<path d="M70 90l5 12 12 5-12 5-5 12-5-12-12-5 12-5zM235 100l4 9 9 4-9 4-4 9-4-9-9-4 9-4z" fill="#fff4b0"/>':''}`;
+return`<svg viewBox="0 0 300 280" aria-hidden="true"><ellipse cx="150" cy="252" rx="130" ry="24" fill="#000" opacity=".25"/><ellipse cx="150" cy="238" rx="128" ry="30" fill="#b98250" stroke="#5a3718" stroke-width="4"/><path d="M36 238q114 16 228 0M62 226q88 12 176 0" stroke="#8a5a30" stroke-width="2" fill="none"/>${b}<path d="M24 214q14-12 30-4q-8 14-30 4z" fill="#f4a9b8" stroke="#d9758a" stroke-width="2"/><path d="M34 220q12-8 24-2" fill="none" stroke="#fff" opacity=".5"/><ellipse cx="258" cy="214" rx="15" ry="10" fill="#8fd14f" stroke="#5a9a2a" stroke-width="2"/><ellipse cx="253" cy="210" rx="5" ry="3" fill="#d4f59a"/><path class="tw" d="M262 66l4 9 9 4-9 4-4 9-4-9-9-4 9-4z" fill="#fff"/><path class="tw" style="animation-delay:-1s" d="M40 96l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#fff"/></svg>`}
+function mkSprite(kind,gold){const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d'),C=gold?['#ffe27a','#c98f12']:{s:['#ff9a6b','#e0623a'],t:['#e0475b','#9c1c36'],e:['#ffd24a','#d49a1c'],m:['#ff9a6b','#e0623a'],g:['#ff7a1a','#c64b00']}[kind],ell=(cx,cy,rx,ry,f,st)=>{x.beginPath();x.ellipse(cx,cy,rx,ry,0,0,6.29);x.fillStyle=f;x.fill();if(st)x.stroke()};x.lineWidth=2.5;x.lineJoin='round';x.strokeStyle=C[1];
+if(kind==='m'){ell(32,32,28,28,'#1f2d25');ell(32,32,22,22,'#fffaf0');ell(32,32,10,10,C[0],1);ell(28,28,4,4,'#7cbf4a')}
+else if(kind==='g'){x.fillStyle='#1f2d25';x.fillRect(12,22,40,30);ell(32,22,20,9,'#fffaf0');for(let i=0;i<9;i++)ell(20+i%3*12,19+(i/3|0)*3,4,3.5,C[0],0)}
+else{ell(32,44,24,11,'#fffaf0');x.beginPath();x.moveTo(6,40);x.quadraticCurveTo(32,4,58,40);x.quadraticCurveTo(32,52,6,40);x.fillStyle=C[0];x.fill();x.stroke();x.fillStyle='#1f2d25';x.fillRect(28,22,8,28)}return c}
+const SPN=['s','t','e','m','g'].map(k=>mkSprite(k,0)),SPG=['s','m'].map(k=>mkSprite(k,1));
+/* Partikel */
+const FX=$('#fx'),cx=FX.getContext('2d'),PL=Array.from({length:260},()=>({a:0}));let pi=0,run=0,lt=0,sq;
+function rs(){const d=Math.min(2,devicePixelRatio||1);FX.width=innerWidth*d;FX.height=innerHeight*d;cx.setTransform(d,0,0,d,0,0)}rs();addEventListener('resize',rs);
+function spawn(x,y,n,crit){for(let k=0;k<n;k++){let p=null;for(let j=0;j<PL.length;j++){const q=PL[pi=(pi+1)%PL.length];if(!q.a){p=q;break}}if(!p)p=PL[pi=(pi+1)%PL.length];
+const a=-Math.PI/2+(Math.random()-.5)*2.7,sp=(crit?450:300)+Math.random()*(crit?650:420);Object.assign(p,{a:1,x:x+(Math.random()-.5)*60,y:y+(Math.random()-.5)*30,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,r:Math.random()*6,vr:(Math.random()-.5)*14,z:(crit?32:20)+Math.random()*(crit?26:22),l:0,m:.8+Math.random()*.7,s:crit&&Math.random()<.6?SPG[Math.random()*2|0]:SPN[Math.random()*5|0]})}
+if(!run){run=1;lt=performance.now();requestAnimationFrame(loop)}}
+function loop(t){const dt=Math.min(.05,(t-lt)/1000);lt=t;cx.clearRect(0,0,innerWidth,innerHeight);let n=0;
+for(const p of PL){if(!p.a)continue;p.vy+=1500*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.r+=p.vr*dt;p.l+=dt;if(p.l>=p.m){p.a=0;continue}n++;
+cx.globalAlpha=p.l>p.m*.65?1-(p.l-p.m*.65)/(p.m*.35):1;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.drawImage(p.s,-p.z/2,-p.z/2,p.z,p.z);cx.restore()}
+cx.globalAlpha=1;if(n)requestAnimationFrame(loop);else run=0}
+function flt(x,y,t,c){const e=mk('div','fl'+(c?' c':''));e.textContent=t;e.style.left=x+'px';e.style.top=y+'px';$('#fl').append(e);if($('#fl').children.length>30)$('#fl').firstChild.remove();setTimeout(()=>e.remove(),1000)}
+/* Klick */
+function ring(x,y,c){if(s.red||$('#fl').children.length>30)return;const e=mk('div','rg'+(c?' c':''));e.style.left=x+'px';e.style.top=y+'px';$('#fl').append(e);setTimeout(()=>e.remove(),450)}
+const BIG=$('#big');function renderBig(){BIG.innerHTML=bigSVG(s.skin)}
+function doClick(px,py){const now=Date.now();if(now-lastClick>1500)combo=0;combo++;lastClick=now;calc();const crit=Math.random()<critCh(),on=rushOn(),jp=(s.clicks+1)%100===0,amt=clickPow()*comboMult()*(on?2:1)*(now<s.cr?10:1)*(jp?5:1)*(crit?critMul():1);
+gain(amt);s.clicks++;prog('clicks',1);if(crit){s.crits++;prog('crit',1)}if(!on)s.rush=Math.min(100,s.rush+1.5*(1+.15*s.rs[2]));
+const r=BIG.getBoundingClientRect();spawn(r.left+r.width/2,r.top+r.height*.5,s.red?(crit?8:3):(jp?40:crit?18:5+(Math.random()*4|0)),crit||jp);flt(px,py-10,(jp?'JACKPOT! ':'')+'+'+fmt(amt)+' Sushi',crit||jp);ring(px,py,crit||jp);snd(crit||jp?'crit':'click');if(jp)toast('Jackpot-Klick! Auszahlung ×5');
+if(!s.red){sq&&sq.cancel();sq=BIG.firstElementChild.animate([{transform:'scale(1)'},{transform:'scale(1.09,.88)',offset:.25},{transform:'scale(.96,1.07)',offset:.6},{transform:'scale(1)'}],{duration:200})}}
+BIG.addEventListener('pointerdown',e=>{e.preventDefault();doClick(e.clientX,e.clientY)});
+BIG.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();if(!e.repeat){const r=BIG.getBoundingClientRect();doClick(r.left+r.width/2,r.top+r.height/3)}}});
+BIG.addEventListener('click',e=>e.preventDefault());
+const RU=$('#rush');RU.onclick=()=>{if(s.rush>=100&&!rushOn()){s.rushEnd=Date.now()+15000;s.rush=0;snd('gold');toast('Sushi Rush! 15 s: Produktion ×5, Klicks ×2')}};
+/* Goldenes Sushi */
+let nextG=Date.now()+30000+Math.random()*60000,gEl=null;
+function goldCheck(now){if(gEl||now<nextG)return;const el=gEl=mk('button','gold'),im=new Image();im.src=SPG[0].toDataURL();im.alt='';el.append(im);el.setAttribute('aria-label','Goldenes Sushi – anklicken!');el.style.left=(8+Math.random()*75)+'%';el.style.top=(18+Math.random()*55)+'%';document.body.append(el);
+const rm=()=>{if(gEl!==el)return;el.remove();gEl=null;nextG=Date.now()+45000+Math.random()*90000};
+el.onclick=()=>{calc();const b=el.getBoundingClientRect(),w=Math.random(),n=Date.now();let m;if(w<.45){const r=cps*60+clickPow()*40+100;gain(r);m='+'+fmt(r)+' Sushi'}else if(w<.75){s.fz=n+20000;m='Sushi-Fieber! Produktion ×7 (20 s)'}else{s.cr=n+15000;m='Klick-Rausch! Klicks ×10 (15 s)'}s.gold++;spawn(b.x+b.width/2,b.y+b.height/2,22,1);flt(b.x+30,b.y,m,1);toast('Goldenes Sushi: '+m);snd('gold');rm()};setTimeout(rm,12000)}
+/* Käufe */
+const G=1.17,costN=(i,n)=>P[i].c*Math.pow(G,s.own[i])*(Math.pow(G,n)-1)/(G-1);
+function maxN(i){const f=P[i].c*Math.pow(G,s.own[i]);if(!isFinite(f)||f>s.sushi)return 0;let n=Math.floor(Math.log(1+s.sushi*(G-1)/f)/Math.log(G));if(!(n>0))return 0;while(n>0&&costN(i,n)>s.sushi)n--;while(n<1e5&&costN(i,n+1)<=s.sushi)n++;return n}
+const nOf=i=>qty==='max'?Math.max(1,maxN(i)):qty,upC=i=>P[i].c*80*Math.pow(7,s.upg[i]),lC=(d,l)=>d.c*1.6*Math.pow(d.g2+.12,l);
+function buyP(i){const n=nOf(i),c=costN(i,n);if(n>0&&s.sushi>=c){s.sushi-=c;s.own[i]+=n;snd('buy');calc();ui()}}
+/* UI-Aufbau */
+const TN=['Küche','Ausrüstung','Forschung','Aufträge','Erfolge','Prestige','Optionen'],tabs=$('#tabs'),panes=$('#panes'),TB=[],PN=TN.map((n,i)=>{const b=mk('button','tab');b.setAttribute('role','tab');b.textContent=n;b.onclick=()=>sel(i);tabs.append(b);TB.push(b);const p=mk('div');p.setAttribute('role','tabpanel');panes.append(p);return p});
+function sel(i){tab=i;TB.forEach((b,j)=>b.setAttribute('aria-selected',j===i));PN.forEach((p,j)=>p.hidden=j!==i);ui()}
+let q=PN[0];q.append(mk('div','d','Käufe:'));const qb=mk('div');qb.id='qty';[1,10,25,'max'].forEach(v=>{const b=mk('button','btn');b.textContent=v==='max'?'MAX':'×'+v;b.onclick=()=>{qty=v;ui()};b._v=v;qb.append(b)});q.append(qb);
+const pr=P.map((p,i)=>{const r=mk('div','row',`<span class="stamp">${p.g}</span><div><b>${p.n}</b> <span class="ow"></span><div class="d"></div><div class="ms d"></div></div><div class="bx"><button class="btn bu"></button><button class="btn up"></button></div>`);r.querySelector('.bu').onclick=()=>buyP(i);r.querySelector('.up').onclick=()=>{const c=upC(i);if(s.own[i]>0&&s.sushi>=c){s.sushi-=c;s.upg[i]++;snd('buy');calc();ui()}};q.append(r);return{r,ow:r.querySelector('.ow'),d:r.querySelector('.d'),ms:r.querySelector('.ms'),bu:r.querySelector('.bu'),up:r.querySelector('.up')}});
+const lk=mk('div','row lock','<span class="stamp">?</span><div><b>???</b><div class="d"></div></div><span></span>');q.append(lk);
+const vis=i=>s.own[i]>0||i===0||s.run>=P[i].c*.5;
+function updK(){qb.childNodes.forEach(b=>b.setAttribute('aria-pressed',b._v===qty));let first=-1;
+P.forEach((p,i)=>{const R=pr[i],v=vis(i);R.r.hidden=!v;if(!v){if(first<0)first=i;return}const n=nOf(i),c=costN(i,n),o=s.own[i],nx=MS.find(m=>m>o);
+setT(R.ow,'×'+o);setT(R.d,`je ${fmt(unit(i))}/s · gesamt ${fmt(o*unit(i))}/s`);setT(R.ms,nx?`Meilenstein bei ${nx} Stück: Ertrag ×2`:'Alle Meilensteine erreicht');
+setT(R.bu,`Kaufe ${n} – ${fmt(c)}`);R.bu.disabled=s.sushi<c;setT(R.up,`Verbessern ×1,5 – ${fmt(upC(i))}`);R.up.disabled=o<1||s.sushi<upC(i)});
+lk.hidden=first<0;if(first>=0)setT(lk.querySelector('.d'),`Freischaltung: ${fmt(P[first].c*.5)} Sushi in diesem Durchlauf (aktuell ${fmt(s.run)})`)}
+function mkList(L,key,host){return L.map((d,i)=>{const r=mk('div','row',`<span class="stamp">${d.g}</span><div><b>${d.n}</b> <span class="lv"></span><div class="d"></div></div>`),b=mk('button','btn');r.append(b);host.append(r);b.onclick=()=>{const l=s[key][i];if(l<(d.max||1e5)&&s.sushi>=lC(d,l)){s.sushi-=lC(d,l);s[key][i]++;snd('buy');calc();ui()}};return{b,lv:r.querySelector('.lv'),d:r.querySelector('.d')}})}
+function updL(L,key,R){L.forEach((d,i)=>{const l=s[key][i],mx=l>=(d.max||1e5),c=lC(d,l);setT(R[i].lv,'Stufe '+l);setT(R[i].d,`${d.d} · Jetzt: ${d.e(l)}`);setT(R[i].b,mx?'MAX':fmt(c));R[i].b.disabled=mx||s.sushi<c})}
+const IR=mkList(IT,'it',PN[1]),RR=mkList(RS,'rs',PN[2]);
+const OT={clicks:o=>`Klicke ${o.g}×`,earn:o=>`Erwirtschafte ${fmt(o.g)} Sushi`,crit:o=>`Lande ${o.g} kritische Treffer`};
+const OR=[0,1,2].map(i=>{const r=mk('div','row','<span class="stamp">注</span><div><b></b><div class="bar"><i></i></div><div class="d"></div></div>'),b=mk('button','btn');r.append(b);PN[3].append(r);b.onclick=()=>{const o=s.ord[i];if(o&&o.p>=o.g){gain(o.r,1);toast('Auftrag erledigt: +'+fmt(o.r)+' Sushi');snd('ach');s.ord[i]=newOrder();ui()}};return{r,t:r.querySelector('b'),i:r.querySelector('i'),d:r.querySelector('.d'),b}});
+function updO(){OR.forEach((R,i)=>{const o=s.ord[i];if(!o)return;setT(R.t,OT[o.k](o));R.i.style.width=o.p/o.g*100+'%';setT(R.d,`${fmt(o.p)} / ${fmt(o.g)}`);const ok=o.p>=o.g;setT(R.b,ok?'Abholen +'+fmt(o.r):'Belohnung '+fmt(o.r));R.b.disabled=!ok})}
+const sk=mk('div');const hd=mk('div','d');PN[4].append(hd,sk);const SB=SK.map((k,i)=>{const b=mk('button','btn');b.style.margin='2px';b.onclick=()=>{if(ac>=SKT[i]){s.skin=i;renderBig();ui()}};sk.append(b);return b});
+const ag=mk('div');ag.style.marginTop='8px';PN[4].append(ag);const AR=ACH.map(a=>{const e=mk('span','ach');e.textContent=a.n;ag.append(e);return e});
+function updA(){SB.forEach((b,i)=>{setT(b,ac>=SKT[i]?SK[i].n:`${SK[i].n} (ab ${SKT[i]} Erfolgen)`);b.disabled=ac<SKT[i];b.setAttribute('aria-pressed',s.skin===i)});ACH.forEach((a,i)=>AR[i].className='ach'+(s.ach[a.id]?' got':''));setT(hd,`Sushi-Designs: ${ac} / ${ACH.length} Erfolge (jeder Erfolg: +1 % Produktion)`)}
+const pp=mk('p'),pb=mk('button','btn');PN[5].append(pp,pb);let pt=0;const potN=()=>Math.floor(Math.sqrt(s.run/2e9));
+pb.onclick=()=>{if(potN()<1)return;if(!pt){pt=1;setTimeout(()=>pt=0,4000);ui();return}pt=0;const g=potN(),n=def();for(const f of['life','clicks','crits','gold','ach','skin','snd','red'])n[f]=s[f];n.tokens=s.tokens+g;n.pres=s.pres+1;s=n;calc();while(s.ord.length<3)s.ord.push(newOrder());renderBig();save();toast('Neustart! +'+g+' Sushi-Lizenzen');ui()};
+function updP(){const g=potN();setT(pp,`Verkaufe dein Restaurant und eröffne neu: Sushi, Helfer, Ausrüstung, Forschung und Aufträge werden zurückgesetzt. Erfolge, Designs, Statistiken und Lizenzen bleiben. Jede Sushi-Lizenz gibt dauerhaft +5 % auf Produktion und Klickkraft. Lizenzen = ⌊√(Sushi dieses Durchlaufs ÷ 2 Mrd.)⌋. Du hast ${s.tokens} Lizenzen (×${(1+.05*s.tokens).toFixed(2)}). Neustart jetzt: +${g}.`);setT(pb,pt?'Wirklich? Nochmal klicken zum Bestätigen':g<1?'Noch nicht möglich ('+fmt(s.run)+' / 2B Sushi)':'Neustart (+'+g+' Lizenzen)');pb.disabled=g<1}
+const op=PN[6],lab=(t,k)=>{const l=mk('label','d','<input type="checkbox"> '+t),i=l.firstChild;i.onchange=()=>{s[k]=i.checked?1:0;document.body.classList.toggle('red',!!s.red)};l.style.display='block';op.append(l);return i};
+const cS=lab('Sound','snd'),cR=lab('Reduzierte Animationen','red'),ta=mk('textarea');ta.setAttribute('aria-label','Spielstand');const eb=mk('button','btn'),ib=mk('button','btn'),hb=mk('button','btn');eb.textContent='Exportieren';ib.textContent='Importieren';hb.textContent='Alles löschen';op.append(ta,eb,' ',ib,' ',hb);
+eb.onclick=()=>{save();ta.value=btoa(unescape(encodeURIComponent(JSON.stringify(s))));ta.select()};
+ib.onclick=()=>{try{const d=san(JSON.parse(decodeURIComponent(escape(atob(ta.value.trim())))));if(!d)throw 0;d.t=Date.now();s=d;calc();while(s.ord.length<3)s.ord.push(newOrder());renderBig();document.body.classList.toggle('red',!!s.red);save();toast('Spielstand importiert');ui()}catch(e){toast('Import fehlgeschlagen: ungültige Daten')}};
+let ht=0;hb.onclick=()=>{if(!ht){ht=1;hb.textContent='Wirklich löschen? Nochmal klicken';setTimeout(()=>{ht=0;hb.textContent='Alles löschen'},4000);return}s=def();calc();while(s.ord.length<3)s.ord.push(newOrder());renderBig();save();ht=0;hb.textContent='Alles löschen';ui()};
+const UPD=[updK,()=>updL(IT,'it',IR),()=>updL(RS,'rs',RR),updO,updA,updP,()=>{cS.checked=!!s.snd;cR.checked=!!s.red}];
+function ui(){const now=Date.now(),on=rushOn();setT($('#sc'),fmt(Math.floor(s.sushi)));setT($('#cps'),fmt(cps)+' Sushi/s · Klick: '+fmt(clickPow())+(now<s.fz?' · FIEBER ×7':'')+(now<s.cr?' · RAUSCH ×10':''));setT($('#cb'),combo>1?`Combo ${combo} → ×${comboMult().toFixed(1)}`:'Combo: klicke schnell!');
+$('#rb').style.width=(on?(s.rushEnd-now)/150:s.rush)+'%';$('#rb').className=on?'on':'';RU.disabled=on||s.rush<100;setT(RU,on?`Rush läuft: ${Math.ceil((s.rushEnd-now)/1000)} s (Produktion ×5, Klicks ×2)`:s.rush>=100?'SUSHI RUSH starten!':`Sushi Rush lädt: ${Math.floor(s.rush)} %`);
+UPD[tab]();setT(TB[3],'Aufträge'+(s.ord.some(o=>o.p>=o.g)?' •':''))}
+/* Zeit, Offline, Speichern */
+function offline(e){const cp=7200+3600*s.rs[4],sec=Math.min(e,cp);calc();const g=cps*sec*.5;if(g>0){gain(g,1);toast(`Willkommen zurück! Offline (${Math.round(sec/60)} Min., 50 %): +${fmt(g)} Sushi`)}save()}
+let last=Date.now();function tick(){const now=Date.now();let dt=(now-last)/1000;last=now;if(dt<0)dt=0;if(dt>120){offline(dt);dt=0}calc();if(dt>0)gain(cps*dt);if(combo&&now-lastClick>1500)combo=0;
+for(const a of ACH)if(!s.ach[a.id]&&a.f()){s.ach[a.id]=1;toast('Erfolg: '+a.n);snd('ach')}goldCheck(now);ui()}
+const lamp='<svg class="lamp" width="46" height="74" viewBox="0 0 46 74"><path d="M23 0v10" stroke="#2a1708" stroke-width="3"/><rect x="14" y="8" width="18" height="6" fill="#2a1708"/><ellipse cx="23" cy="38" rx="20" ry="26" fill="#c9362c" stroke="#5a120d" stroke-width="3"/><path d="M5 30q18 8 36 0M4 42q19 9 38 0" stroke="#7a1710" stroke-width="2" fill="none"/><rect x="14" y="62" width="18" height="6" fill="#2a1708"/><text x="23" y="44" text-anchor="middle" font-size="16" fill="#ffe9a8">寿</text></svg>';
+$('#lamps').innerHTML=lamp.repeat(7);
+document.body.classList.toggle('red',!!s.red);renderBig();calc();while(s.ord.length<3)s.ord.push(newOrder());{const el=(Date.now()-s.t)/1000;if(el>30)offline(el);else s.t=Date.now()}save();
+document.querySelectorAll('footer button').forEach(b=>b.onclick=()=>document.getElementById(b.dataset.d).showModal());sel(0);setInterval(tick,100);setInterval(save,10000);addEventListener('pagehide',save);document.addEventListener('visibilitychange',()=>{if(document.hidden)save()});
+</script></body></html>
